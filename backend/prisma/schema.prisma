@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum WorkType {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum JobStatus {
+  SAVED
+  APPLYING
+  APPLIED
+  INTERVIEW
+  OFFER
+  REJECTED
+}
+
+enum ApplicationStatus {
+  SAVED
+  APPLYING
+  APPLIED
+  INTERVIEW
+  OFFER
+  REJECTED
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  password     String
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  companies    Company[]
+  jobs         Job[]
+  applications Application[]
+
+  @@map("users")
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String
+  website   String?
+  industry  String?
+  location  String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  jobs Job[]
+
+  @@index([userId])
+  @@map("companies")
+}
+
+model Job {
+  id          Int      @id @default(autoincrement())
+  title       String
+  location    String?
+  salary      Int?
+  workType    WorkType?
+  source      String?
+  url         String?
+  description String?
+  status      JobStatus @default(SAVED)
+  dateFound   DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId Int?
+  company   Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  applications Application[]
+
+  @@index([userId])
+  @@index([companyId])
+  @@index([status])
+  @@map("jobs")
+}
+
+model Application {
+  id          Int             @id @default(autoincrement())
+  status      ApplicationStatus @default(SAVED)
+  appliedDate DateTime?
+  cvVersion   String?
+  coverLetter String?
+  notes       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId  Int
+  job    Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([jobId])
+  @@index([status])
+  @@map("applications")
+}

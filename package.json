@@ -1,0 +1,34 @@
+{
+  "name": "jobtrack",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A self-hosted job application management platform",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter './frontend' --filter './backend' dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "build": "pnpm --filter './frontend' --filter './backend' build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "lint": "pnpm --filter './frontend' --filter './backend' lint",
+    "lint:fix": "pnpm --filter './frontend' --filter './backend' lint:fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "test": "pnpm --filter './frontend' --filter './backend' test",
+    "test:e2e": "pnpm --filter frontend test:e2e",
+    "db:migrate": "pnpm --filter backend db:migrate",
+    "db:seed": "pnpm --filter backend db:seed",
+    "db:studio": "pnpm --filter backend db:studio",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.2"
+  }
+}
