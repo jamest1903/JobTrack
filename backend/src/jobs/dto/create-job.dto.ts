@@ -8,7 +8,7 @@ import {
   Min,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { WorkType, JobStatus } from '@prisma/client';
+import { WorkType } from '@prisma/client';
 
 export class CreateJobDto {
   @ApiProperty({ example: 'Senior Software Engineer' })
@@ -55,8 +55,4 @@ export class CreateJobDto {
   @MaxLength(10000)
   description?: string;
 
-  @ApiPropertyOptional({ enum: JobStatus, default: JobStatus.SAVED })
-  @IsOptional()
-  @IsEnum(JobStatus)
-  status?: JobStatus;
 }

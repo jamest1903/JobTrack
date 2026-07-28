@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
 
-  const hashedPassword = await bcrypt.hash('password123', 12);
+  const hashedPassword = await bcrypt.hash('admin', 12);
 
   const user = await prisma.user.upsert({
     where: { email: 'demo@jobtrack.dev' },
@@ -27,7 +27,6 @@ async function main() {
         website: 'https://acme.com',
         industry: 'Technology',
         location: 'San Francisco, CA',
-        userId: user.id,
       },
     }),
     prisma.company.create({
@@ -36,7 +35,6 @@ async function main() {
         website: 'https://techstart.com',
         industry: 'SaaS',
         location: 'Remote',
-        userId: user.id,
       },
     }),
   ]);
@@ -54,8 +52,6 @@ async function main() {
         source: 'LinkedIn',
         url: 'https://linkedin.com/jobs/123',
         description: 'Looking for a senior engineer to join our team.',
-        status: 'APPLIED',
-        userId: user.id,
       },
     }),
     prisma.job.create({
@@ -68,8 +64,6 @@ async function main() {
         source: 'Indeed',
         url: 'https://indeed.com/jobs/456',
         description: 'Full stack role with React and Node.js.',
-        status: 'INTERVIEW',
-        userId: user.id,
       },
     }),
   ]);

@@ -2,28 +2,22 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
-import { JobStatus } from '@prisma/client';
 
 @Injectable()
 export class JobsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: number, createJobDto: CreateJobDto) {
+  async create(createJobDto: CreateJobDto) {
     return this.prisma.job.create({
       data: {
         ...createJobDto,
-        userId,
         companyId: createJobDto.companyId,
       },
     });
   }
 
-  async findAll(userId: number, status?: JobStatus) {
+  async findAll() {
     return this.prisma.job.findMany({
-      where: {
-        userId,
-        ...(status && { status }),
-      },
       include: {
         company: true,
       },
@@ -31,9 +25,9 @@ export class JobsService {
     });
   }
 
-  async findOne(userId: number, id: number) {
+  async findOne(id: number) {
     const job = await this.prisma.job.findFirst({
-      where: { id, userId },
+      where: { id },
       include: {
         company: true,
       },
@@ -44,16 +38,16 @@ export class JobsService {
     return job;
   }
 
-  async update(userId: number, id: number, updateJobDto: UpdateJobDto) {
-    await this.findOne(userId, id);
+  async update(id: number, updateJobDto: UpdateJobDto) {
+    await this.findOne(id);
     return this.prisma.job.update({
       where: { id },
       data: updateJobDto,
     });
   }
 
-  async remove(userId: number, id: number) {
-    await this.findOne(userId, id);
+  async remove(id: number) {
+    await this.findOne(id);
     return this.prisma.job.delete({
       where: { id },
     });

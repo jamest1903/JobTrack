@@ -18,10 +18,10 @@ jobtrack/
 
 ```
 ┌─────────────┐      HTTP/JSON      ┌──────────────┐      SQL       ┌──────────┐
-│   Frontend   │ ──────────────────► │   Backend    │ ─────────────► │ Postgres │
-│  React+Vite  │ ◄────────────────── │   NestJS     │ ◄───────────── │   16     │
-│  Port 5173   │   API responses     │  Port 3000   │   Prisma ORM   │ Port 5432│
-└─────────────┘                      └──────────────┘                └──────────┘
+│   Frontend  │ ──────────────────► │   Backend    │ ─────────────► │ Postgres │
+│  React+Vite │ ◄────────────────── │   NestJS     │ ◄───────────── │   16     │
+│  Port 5173  │   API responses     │  Port 3000   │   Prisma ORM   │ Port 5432│
+└─────────────┘                     └──────────────┘                └──────────┘
                                           │
                                           │ Caching
                                           ▼
@@ -53,7 +53,7 @@ frontend/src/
 ├── pages/                 Page components (empty - placeholder routes)
 ├── types/
 │   └── index.ts           TypeScript interfaces for all entities
-├── App.tsx                 Route definitions
+├── App.tsx                Route definitions
 ├── main.tsx               Entry point with providers
 └── index.css              Tailwind + shadcn/ui theme variables
 ```
@@ -98,8 +98,8 @@ AppModule
 ├── AuthModule                Registration, login, JWT tokens
 ├── UsersModule               User profile
 ├── CompaniesModule           Company CRUD
-├── JobsModule                Job CRUD with status filtering
-├── ApplicationsModule         Application CRUD with status filtering
+├── JobsModule                Job CRUD
+├── ApplicationsModule        Application CRUD with status filtering
 └── DashboardModule           Statistics and recent activity
 ```
 
@@ -124,7 +124,7 @@ backend/src/
 │   └── companies.service.ts
 ├── jobs/
 │   ├── dto/                  CreateJobDto, UpdateJobDto
-│   ├── jobs.controller.ts    Full CRUD + status filter
+│   ├── jobs.controller.ts    Full CRUD
 │   └── jobs.service.ts
 ├── applications/
 │   ├── dto/                  CreateApplicationDto, UpdateApplicationDto
@@ -167,7 +167,7 @@ All endpoints are prefixed with `/api`. All except auth endpoints require a vali
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/companies` | Create company |
-| GET | `/api/companies` | List all user's companies |
+| GET | `/api/companies` | List all companies |
 | GET | `/api/companies/:id` | Get single company |
 | PUT | `/api/companies/:id` | Update company |
 | DELETE | `/api/companies/:id` | Delete company |
@@ -177,7 +177,7 @@ All endpoints are prefixed with `/api`. All except auth endpoints require a vali
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/jobs` | Create job |
-| GET | `/api/jobs` | List jobs (optional `?status=` filter) |
+| GET | `/api/jobs` | List all jobs |
 | GET | `/api/jobs/:id` | Get single job |
 | PUT | `/api/jobs/:id` | Update job |
 | DELETE | `/api/jobs/:id` | Delete job |
@@ -236,8 +236,8 @@ Each API request ──► Bearer <accessToken> header
 
 ## Shared Conventions
 
-- All database queries are scoped to the authenticated user via `userId` from the JWT
-- DELETE operations use cascade: deleting a User removes their Companies, Jobs, and Applications
+- Applications are scoped to the authenticated user via `userId` from the JWT; Jobs and Companies are global
+- DELETE operations use cascade: deleting a User removes their Applications
 - Deleting a Company sets `companyId` to null on associated Jobs (does not delete Jobs)
 - All timestamps use `createdAt` / `updatedAt` convention
-- Status enums (`JobStatus`, `ApplicationStatus`) share the same values: `SAVED`, `APPLYING`, `APPLIED`, `INTERVIEW`, `OFFER`, `REJECTED`
+- `ApplicationStatus` values: `SAVED`, `APPLYING`, `APPLIED`, `INTERVIEW`, `OFFER`, `REJECTED`

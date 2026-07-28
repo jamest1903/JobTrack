@@ -28,20 +28,9 @@ URL format: `postgresql://jobtrack:jobtrack_dev_password@localhost:5432/jobtrack
 | `HYBRID` | Partial remote, partial on-site |
 | `ONSITE` | Fully on-site position |
 
-### JobStatus
-
-| Value | Description |
-|-------|-------------|
-| `SAVED` | Bookmarked, not yet applied |
-| `APPLYING` | In the process of applying |
-| `APPLIED` | Application submitted |
-| `INTERVIEW` | Interview stage |
-| `OFFER` | Received offer |
-| `REJECTED` | Rejected |
-
 ### ApplicationStatus
 
-Same values as `JobStatus`. Tracks application-specific progress.
+Tracks application-specific progress.
 
 ---
 
@@ -59,7 +48,7 @@ Same values as `JobStatus`. Tracks application-specific progress.
 | `createdAt` | DateTime | Default: `now()` |
 | `updatedAt` | DateTime | Auto-updated |
 
-**Relations:** has many Companies, Jobs, Applications.
+**Relations:** has many Applications.
 
 ---
 
@@ -75,9 +64,8 @@ Same values as `JobStatus`. Tracks application-specific progress.
 | `notes` | String? | |
 | `createdAt` | DateTime | Default: `now()` |
 | `updatedAt` | DateTime | Auto-updated |
-| `userId` | Int | FK → User, Cascade delete, Indexed |
 
-**Relations:** belongs to User, has many Jobs.
+**Relations:** has many Jobs.
 
 ---
 
@@ -93,16 +81,14 @@ Same values as `JobStatus`. Tracks application-specific progress.
 | `source` | String? | Where the job was found |
 | `url` | String? | Link to job posting |
 | `description` | String? | |
-| `status` | JobStatus | Default: `SAVED` |
 | `dateFound` | DateTime | Default: `now()` |
 | `createdAt` | DateTime | Default: `now()` |
 | `updatedAt` | DateTime | Auto-updated |
-| `userId` | Int | FK → User, Cascade delete, Indexed |
 | `companyId` | Int? | FK → Company, SetNull on delete, Indexed |
 
-**Relations:** belongs to User, optionally belongs to Company, has many Applications.
+**Relations:** optionally belongs to Company, has many Applications.
 
-**Indexes:** `userId`, `companyId`, `status`.
+**Indexes:** `companyId`.
 
 ---
 
@@ -130,11 +116,8 @@ Same values as `JobStatus`. Tracks application-specific progress.
 ## Relationships
 
 ```
-User (1) ──────< (many) Company
+User
   │
-  ├──────< (many) Job
-  │                 │
-  │                 └──< (many) Application
   │
   └──────< (many) Application
 ```
@@ -143,8 +126,6 @@ User (1) ──────< (many) Company
 
 | Parent | Child | On Delete |
 |--------|-------|-----------|
-| User | Companies | **Cascade** — all deleted |
-| User | Jobs | **Cascade** — all deleted |
 | User | Applications | **Cascade** — all deleted |
 | Company | Jobs | **SetNull** — `companyId` becomes null |
 | Job | Applications | **Cascade** — all deleted |
@@ -157,9 +138,9 @@ User (1) ──────< (many) Company
 
 | Entity | Data |
 |--------|------|
-| User | `demo@jobtrack.dev` / `password123` |
+| User | `demo@jobtrack.dev` / `admin` |
 | Company | Acme Corp, TechStart Inc |
-| Job | Senior Software Engineer (APPLIED), Full Stack Developer (INTERVIEW) |
+| Job | Senior Software Engineer, Full Stack Developer |
 | Application | One for each job |
 
 ---

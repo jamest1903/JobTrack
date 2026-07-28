@@ -1,0 +1,1 @@
+"Users do not own companies or jobs. Users own applications. Companies and jobs are shared domain entities."

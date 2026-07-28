@@ -8,7 +8,7 @@ import {
   Min,
 } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { WorkType, JobStatus } from '@prisma/client';
+import { WorkType } from '@prisma/client';
 
 export class UpdateJobDto {
   @ApiPropertyOptional({ example: 'Senior Software Engineer' })
@@ -56,8 +56,4 @@ export class UpdateJobDto {
   @MaxLength(10000)
   description?: string;
 
-  @ApiPropertyOptional({ enum: JobStatus })
-  @IsOptional()
-  @IsEnum(JobStatus)
-  status?: JobStatus;
 }

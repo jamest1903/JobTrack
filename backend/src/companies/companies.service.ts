@@ -7,25 +7,23 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 export class CompaniesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: number, createCompanyDto: CreateCompanyDto) {
+  async create(createCompanyDto: CreateCompanyDto) {
     return this.prisma.company.create({
       data: {
         ...createCompanyDto,
-        userId,
       },
     });
   }
 
-  async findAll(userId: number) {
+  async findAll() {
     return this.prisma.company.findMany({
-      where: { userId },
       orderBy: { name: 'asc' },
     });
   }
 
-  async findOne(userId: number, id: number) {
+  async findOne(id: number) {
     const company = await this.prisma.company.findFirst({
-      where: { id, userId },
+      where: { id },
     });
     if (!company) {
       throw new NotFoundException(`Company with ID ${id} not found`);
@@ -33,16 +31,16 @@ export class CompaniesService {
     return company;
   }
 
-  async update(userId: number, id: number, updateCompanyDto: UpdateCompanyDto) {
-    await this.findOne(userId, id);
+  async update(id: number, updateCompanyDto: UpdateCompanyDto) {
+    await this.findOne(id);
     return this.prisma.company.update({
       where: { id },
       data: updateCompanyDto,
     });
   }
 
-  async remove(userId: number, id: number) {
-    await this.findOne(userId, id);
+  async remove(id: number) {
+    await this.findOne(id);
     return this.prisma.company.delete({
       where: { id },
     });
