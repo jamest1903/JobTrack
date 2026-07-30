@@ -1,15 +1,22 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { AppLayout } from './components/layout/AppLayout';
+import { DashboardPage } from './pages/DashboardPage';
+import { CompaniesPage } from './pages/CompaniesPage';
+import { JobsPage } from './pages/JobsPage';
+import { ApplicationsPage } from './pages/ApplicationsPage';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<div className="p-8"><h1 className="text-2xl font-bold">JobTrack</h1><p className="text-muted-foreground">Welcome to JobTrack</p></div>} />
       <Route path="/login" element={<div>Login</div>} />
       <Route path="/register" element={<div>Register</div>} />
-      <Route path="/dashboard" element={<div>Dashboard</div>} />
-      <Route path="/companies" element={<div>Companies</div>} />
-      <Route path="/jobs" element={<div>Jobs</div>} />
-      <Route path="/applications" element={<div>Applications</div>} />
+      <Route element={<AppLayout />}>
+        <Route index element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="companies" element={<CompaniesPage />} />
+        <Route path="jobs" element={<JobsPage />} />
+        <Route path="applications" element={<ApplicationsPage />} />
+      </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
