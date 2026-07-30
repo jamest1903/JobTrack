@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
 
-  const hashedPassword = await bcrypt.hash('admin', 12);
+  const hashedPassword = await bcrypt.hash('admin123', 12);
 
   const user = await prisma.user.upsert({
     where: { email: 'demo@jobtrack.dev' },

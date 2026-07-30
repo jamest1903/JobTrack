@@ -12,7 +12,7 @@ export class RegisterDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: 'admin' })
+  @ApiProperty({ example: 'admin123' })
   @IsString()
   @MinLength(8)
   @MaxLength(128)

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber, IsEnum, IsUrl, MaxLength } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsEnum, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ApplicationStatus } from '@prisma/client';
 
