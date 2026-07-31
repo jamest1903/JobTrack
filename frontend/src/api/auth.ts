@@ -22,7 +22,7 @@ export function getStoredUser(): User | null {
   }
 }
 
-function storeSession(data: AuthResponse) {
+export function storeSession(data: AuthResponse) {
   localStorage.setItem('accessToken', data.accessToken);
   localStorage.setItem('refreshToken', data.refreshToken);
   localStorage.setItem('user', JSON.stringify(data.user));

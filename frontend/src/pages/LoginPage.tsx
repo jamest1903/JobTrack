@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 import { login, type LoginParams } from '@/api/auth';
 import { getErrorMessage } from '@/api/errors';
+import { useAuth } from '@/auth/AuthContext';
 import { cn } from '@/lib/utils';
 
 interface ValidationErrors {
@@ -28,12 +29,14 @@ function validate(values: LoginParams): ValidationErrors {
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const { setSession } = useAuth();
   const [values, setValues] = useState<LoginParams>({ email: '', password: '' });
   const [errors, setErrors] = useState<ValidationErrors>({});
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setSession(data);
       navigate('/dashboard');
     },
   });

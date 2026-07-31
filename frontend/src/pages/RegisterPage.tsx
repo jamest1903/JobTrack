@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { User, Mail, Lock, Loader2 } from 'lucide-react';
 import { register, type RegisterParams } from '@/api/auth';
 import { getErrorMessage } from '@/api/errors';
+import { useAuth } from '@/auth/AuthContext';
 import { cn } from '@/lib/utils';
 
 interface FormValues extends RegisterParams {
@@ -46,6 +47,7 @@ function validate(values: FormValues): ValidationErrors {
 
 export function RegisterPage() {
   const navigate = useNavigate();
+  const { setSession } = useAuth();
   const [values, setValues] = useState<FormValues>({
     name: '',
     email: '',
@@ -56,7 +58,8 @@ export function RegisterPage() {
 
   const mutation = useMutation({
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setSession(data);
       navigate('/dashboard');
     },
   });

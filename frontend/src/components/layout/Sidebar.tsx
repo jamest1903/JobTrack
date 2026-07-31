@@ -9,7 +9,7 @@ import {
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getStoredUser, logout as logoutApi } from '@/api/auth';
+import { useAuth } from '@/auth/AuthContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -26,11 +26,11 @@ const navItems = [
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const navigate = useNavigate();
   const [loggingOut, setLoggingOut] = useState(false);
-  const user = getStoredUser();
+  const { user, logout } = useAuth();
 
   async function handleLogout() {
     setLoggingOut(true);
-    await logoutApi();
+    await logout();
     navigate('/login');
   }
 
