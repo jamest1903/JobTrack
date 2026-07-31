@@ -1,12 +1,15 @@
-import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Building2,
   Briefcase,
   FileText,
+  LogOut,
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getStoredUser, logout as logoutApi } from '@/api/auth';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -21,6 +24,16 @@ const navItems = [
 ];
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const navigate = useNavigate();
+  const [loggingOut, setLoggingOut] = useState(false);
+  const user = getStoredUser();
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    await logoutApi();
+    navigate('/login');
+  }
+
   return (
     <>
       {isOpen && (
@@ -76,7 +89,29 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         <div className="border-t p-4">
-          <p className="text-sm text-muted-foreground">Not logged in</p>
+          {user ? (
+            <div className="space-y-3">
+              <div className="text-sm">
+                <p className="font-medium truncate">{user.name}</p>
+                <p className="text-muted-foreground truncate">{user.email}</p>
+              </div>
+              <button
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className={cn(
+                  'flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors',
+                  'hover:bg-accent hover:text-accent-foreground',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                  'disabled:cursor-not-allowed disabled:opacity-50',
+                )}
+              >
+                <LogOut className="h-4 w-4" />
+                {loggingOut ? 'Logging out...' : 'Log out'}
+              </button>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Not logged in</p>
+          )}
         </div>
       </aside>
     </>
