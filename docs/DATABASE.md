@@ -138,7 +138,7 @@ User
 
 | Entity | Data |
 |--------|------|
-| User | `demo@jobtrack.dev` / `admin` |
+| User | `demo@jobtrack.dev` / `admin123` |
 | Company | Acme Corp, TechStart Inc |
 | Job | Senior Software Engineer, Full Stack Developer |
 | Application | One for each job |
