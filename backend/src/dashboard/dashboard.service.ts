@@ -44,7 +44,8 @@ export class DashboardService {
     };
   }
 
-  async getRecentActivity(userId: number, limit = 10) {
+  async getRecentActivity(userId: number, limit?: number) {
+    const take = typeof limit === 'number' && limit > 0 ? Math.floor(limit) : 10;
     const recentApplications = await this.prisma.application.findMany({
       where: { userId },
       include: {
@@ -55,7 +56,7 @@ export class DashboardService {
         },
       },
       orderBy: { updatedAt: 'desc' },
-      take: limit,
+      take,
     });
 
     return recentApplications;
