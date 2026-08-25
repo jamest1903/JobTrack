@@ -4,8 +4,8 @@ import { StatCards } from '@/components/dashboard/StatCards';
 import { StatusBreakdown } from '@/components/dashboard/StatusBreakdown';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
-import { ErrorState } from '@/components/dashboard/ErrorState';
-import { EmptyState } from '@/components/dashboard/EmptyState';
+import { ErrorState } from '@/components/common/ErrorState';
+import { EmptyState } from '@/components/common/EmptyState';
 
 const RECENT_ACTIVITY_LIMIT = 5;
 
